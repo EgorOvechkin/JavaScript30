@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS + CSS Clock</title>
+</head>
+<body>
+
+
+    <div class="clock">
+      <div class="clock-face">
+        <div class="decorated-circle"></div>
+        <div class="hand hour-hand"></div>
+        <div class="hand min-hand"></div>
+        <div class="hand second-hand"></div>
+      </div>
+    </div>
+
+
+  <style>
+    html {
+      background:#018DED url(http://unsplash.it/1500/1000?image=881&blur=50);
+      background-size:cover;
+      font-family:'helvetica neue';
+      text-align: center;
+      font-size: 10px;
+    }
+
+    body {
+      margin: 0;
+      font-size: 2rem;
+      display:flex;
+      flex:1;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    .clock {
+      width: 30rem;
+      height: 30rem;
+      border:20px solid white;
+      border-radius:50%;
+      margin:50px auto;
+      position: relative;
+      padding:2rem;
+      box-shadow:
+        0 0 0 4px rgba(0,0,0,0.1),
+        inset 0 0 0 3px #EFEFEF,
+        inset 0 0 10px black,
+        0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .clock-face {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform: translateY(-3px); /* account for the height of the clock hands */
+    }
+
+    .hand {
+      width:50%;
+      height:6px;
+      background: black;
+      position: absolute;
+      top:50%;
+      transform: rotate(90deg);
+      transform-origin: 100%;
+    }
+
+    .hand.hour-hand {
+      z-index: 5;
+      background: #6e5050;
+      transform-origin: 0%;
+      width: 25%;
+      left: 50%;
+    }
+
+    .hand.second-hand {
+      background: red;
+      height: 3px;
+      opacity: .8;
+    }
+
+    .decorated-circle {
+      z-index: 10;
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      top: calc(50% - 2px);
+      left: calc(50% - 5px);
+      background: black;
+      border-radius: 50%;
+    }
+  </style>
+
+  <script>
+    (function main() {
+      const
+        SECONDS = 'seconds',
+        MINUTES = 'minutes',
+        HOURS = 'hours';
+
+      function getAngle(unit, date) {
+        switch (unit) {
+          case SECONDS:
+            return (360 / 60) * date.getSeconds();
+          case MINUTES:
+            return (360 / 60) * date.getMinutes();
+          case HOURS:
+            return (360 / 12) * date.getHours();
+          default:
+            return NaN;
+        }
+      }
+
+      function setTime() {
+        const date = new Date();
+
+        document.querySelector('.hour-hand').style.transform = `rotate(${getAngle(HOURS, date) + 270}deg)`;
+        document.querySelector('.min-hand').style.transform = `rotate(${getAngle(MINUTES, date) + 90}deg)`;
+        document.querySelector('.second-hand').style.transform = `rotate(${getAngle(SECONDS, date) + 90}deg)`;
+      }
+
+      setInterval(setTime, 1000);
+
+    })();
+  </script>
+</body>
+</html>
